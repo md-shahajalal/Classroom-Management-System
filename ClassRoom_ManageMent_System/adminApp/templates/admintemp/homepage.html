@@ -1,0 +1,365 @@
+{% extends 'admintemp/base.html' %}
+
+{% block css %}
+
+
+{% endblock %}
+
+{% block body %}
+{% load static %}
+<!--addClassSchedule-->
+<div class="container my-4" id="addClassSchedule">
+    <div class="row">
+        <div class="col-lg-6 offset-lg-2">
+
+
+            <h2>Add Class Schedule</h2>
+            <hr>
+
+            <form method='post' id="addClassFormId">{% csrf_token %}
+                <div class="row mb-2">
+                    <div class="col-lg-5">
+                        <h6>Select Semester</h6>
+                    </div>
+                    <div class="col">
+                        <div class="dropdown">
+                            <a class="btn btn-primary dropdown-toggle" aria-haspopup="true" role="button"
+                                id="semesterId" data-bs-toggle="dropdown" aria-expanded="false">
+                                Select Semester
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="semesterId">
+                                <li><a class="dropdown-item semester-item" id="semester-item1">1st year, 1st semester</a></li>
+                                <li><a class="dropdown-item semester-item" id="semester-item2">1st year, 2nd semester</a></li>
+                                <li><a class="dropdown-item semester-item" id="semester-item3">2nd year, 1st semester</a></li>
+                                <li><a class="dropdown-item semester-item" id="semester-item4">2nd year, 2nd semester</a></li>
+                                <li><a class="dropdown-item semester-item" id="semester-item5">3rd year, 1st semester</a></li>
+                                <li><a class="dropdown-item semester-item" id="semester-item6">3rd year, 2nd semester</a></li>
+                                <li><a class="dropdown-item semester-item" id="semester-item7">4th year, 1st semester</a></li>
+                                <li><a class="dropdown-item semester-item" id="semester-item8">4th year, 2nd semester</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-lg-5">
+                        <h6>Select Course code</h6>
+                    </div>
+                    <div class="col">
+                        <div class="dropdown">
+                            <a class="btn btn-primary dropdown-toggle" aria-haspopup="true" role="button"
+                                id="courseCodeId" data-bs-toggle="dropdown" aria-expanded="false">
+                                Select Course Code
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="courseCodeId">
+                                {%for course in courses%}
+
+                                <li><a class="dropdown-item course-code-item"
+                                        id="course-code-item">{{course.course_code}}</a></li>
+                                {%endfor%}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-lg-5">
+                        <h6>Select Course Name</h6>
+                    </div>
+                    <div class="col">
+                        <div class="dropdown">
+                            <a class="btn btn-primary dropdown-toggle" aria-haspopup="true" role="button"
+                                id="courseNameId" data-bs-toggle="dropdown" aria-expanded="false">
+                                Select Course Name
+                            </a>
+
+                            <ul class="dropdown-menu" aria-labelledby="courseNameId">
+                                {%for course in courses%}
+                                <li><a class="dropdown-item course-name-item"
+                                        id="course-name-item">{{course.course_name}}</a></li>
+                                {%endfor%}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-lg-5">
+                        <h6>Select Assigned Teacher</h6>
+                    </div>
+                    <div class="col">
+                        <div class="dropdown">
+                            <a class="btn btn-primary dropdown-toggle" aria-haspopup="true" role="button"
+                                id="assignedTeacherId" data-bs-toggle="dropdown" aria-expanded="false">
+                                Select Assigned Teacher
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="assignedTeacherId">
+                                {% for teacher in assigned_teachers %}
+                                <li><a class="dropdown-item teacher-item"
+                                        id="teacher-item">{{teacher.faculty_name}}({{teacher.faculty_designation}})</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-lg-5">
+                        <h6>Select ClassRoom Number</h6>
+                    </div>
+                    <div class="col">
+                        <div class="dropdown">
+                            <a class="btn btn-primary dropdown-toggle" aria-haspopup="true" role="button"
+                                id="classRoomId" data-bs-toggle="dropdown" aria-expanded="false">
+                                Select ClassRoom Number
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="classRoomId">
+                                {% for classroom in classrooms %}
+                                <li><a class="dropdown-item classroom-item"
+                                        id="classroom-item">{{classroom.classroom_no}}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label for="class-date">Class Date:</label>
+                        <input type="date" id="class-date" name="class-date">
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label for="class-time">Class Time:</label>
+                        <input type="time" id="class-time" name="class-time">
+                    </div>
+                </div>
+
+
+                <div class="row mb-2">
+                    <div class="col-lg-5">
+                        <h6>Select Class Duration</h6>
+                    </div>
+                    <div class="col">
+                        <div class="dropdown">
+                            <a class="btn btn-primary dropdown-toggle" aria-haspopup="true" role="button"
+                                id="durationId" data-bs-toggle="dropdown" aria-expanded="false">
+                                45 min
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="durationId">
+                                <li><a class="dropdown-item duration-item" >45 min</a></li>
+                                <li><a class="dropdown-item duration-item" >1 hr</a></li>
+                                <li><a class="dropdown-item duration-item" >1.30 hr</a></li>
+                                <li><a class="dropdown-item duration-item" >2 hr</a></li>
+                                <li><a class="dropdown-item duration-item" >2.30 hr</a></li>
+                                <li><a class="dropdown-item duration-item" >3 hr</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-danger m-2" name="addClassForm"
+                    id="submit-class-btnId">Submit</button>
+            </form>
+
+        </div>
+        <hr>
+
+
+    </div>
+</div>
+
+
+<!--addFaculty-->
+<div class="container my-4" id="addFaculty">
+    <div class="row">
+        <div class="col-lg-6 offset-lg-2">
+
+
+            <h2>Add Faculty</h2>
+            <hr>
+            <form method='post'>{% csrf_token %}
+
+                <div class="type-selector ">
+                    <h6>Designation</h6>
+                    <div class="form-check form-check-inline designation-type">
+                        <input class="form-check-input designation-input" type="radio" name="designationOptions" id="inlineRadio1"
+                            value="Lecturer" checked>
+                        <label class="form-check-label" for="inlineRadio1"><b>Lecturer</b></label>
+                    </div>
+                    <div class="form-check form-check-inline designation-type">
+                        <input class="form-check-input designation-input" type="radio" name="designationOptions" id="inlineRadio2"
+                            value="Assistant Professor">
+                        <label class="form-check-label" for="inlineRadio2"><b>Assistant Professor</b></label>
+                    </div>
+                    <div class="form-check form-check-inline designation-type">
+                        <input class="form-check-input designation-input" type="radio" name="designationOptions" id="inlineRadio1"
+                            value="Associate Professor">
+                        <label class="form-check-label" for="inlineRadio1"><b>Associate Professor</b></label>
+                    </div>
+                    <div class="form-check form-check-inline designation-type">
+                        <input class="form-check-input designation-input" type="radio" name="designationOptions" id="inlineRadio1"
+                            value="Professor">
+                        <label class="form-check-label" for="inlineRadio1"><b>Professor</b></label>
+                    </div>
+                </div>
+
+                <div class="form-group mb-2">
+
+                    <input type="text" class="form-control" id="faculty-nameId" placeholder="Enter FacultyName"
+                        name="facultyName">
+                </div>
+
+                <button type="submit" class="btn btn-danger m-2" id="add-faculty-btnId"name="addFacultyForm">Add</button>
+            </form>
+
+        </div>
+        <hr>
+
+
+    </div>
+</div>
+
+
+<!--add course-->
+
+<div class="container my-4" id="addCourse">
+    <div class="row">
+        <div class="col-lg-6 offset-lg-2">
+
+            <h2>Add Course</h2>
+            <hr>
+            <form action="/teacher/" method='post'>{% csrf_token %}
+
+                <label for="semester" class="form-label">Select Semester for the Course</label>
+                <input class="form-control" list="semesterOptions" id="semester" placeholder="Type to search..."
+                    name="semester">
+                <datalist id="semesterOptions">
+                    <option value="1st year, 1st semester">
+                    <option value="1st year, 2nd semester">
+                    <option value="2nd year, 1st semester">
+                    <option value="2nd year, 2nd semester">
+                    <option value="3rd year, 1st semester">
+                    <option value="3rd year, 2nd semester">
+                    <option value="4th year, 1st semester">
+                    <option value="4th year, 2nd semester">
+
+                </datalist>
+
+                <div class="type-selector ">
+                    <h6>Type of the course</h6>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="courseTypeOptions" id="typeTheory"
+                            value="Theory" checked>
+                        <label class="form-check-label" for="typeTheory"><b>Theory</b></label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="courseTypeOptions" id="typeLab" value="Lab">
+                        <label class="form-check-label" for="typeLab"><b>Lab</b></label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Course Code" aria-label="Course Code"
+                            name="courseCode">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Course Title" aria-label="Course Title"
+                            name="courseTitle">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-danger m-2" name="addCourseForm">Add</button>
+
+
+            </form>
+
+        </div>
+        <hr>
+
+
+    </div>
+</div>
+
+<!--addClassroom-->
+
+<div class="container my-4" id="addClassRoom">
+    <div class="row">
+        <div class="col-lg-6 offset-lg-2">
+
+
+            <h2>Add ClassRoom</h2>
+            <hr>
+            <form action="/teacher/#addClassRoom" method='post'>{% csrf_token %}
+
+                <div class="type-selector ">
+                    <h6>ClassRoom Used for</h6>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="theory"
+                            value="Theory" checked>
+                        <label class="form-check-label" for="theory"><b>Theory</b></label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="lab" value="lab">
+                        <label class="form-check-label" for="lab"><b>Lab</b></label>
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+
+                    <input type="text" class="form-control" id="classroomnumber"
+                        placeholder="Enter The ClassRoom Number" name="classroomnumber">
+                </div>
+
+                <button type="submit" class="btn btn-danger m-2" name="addClassRoomForm">Add</button>
+            </form>
+
+        </div>
+        <hr>
+
+
+    </div>
+</div>
+
+
+<!-- add notice -->
+<div class="container my-4" id="addNotice">
+    <div class="row">
+        <div class="col-lg-6 offset-lg-2">
+
+
+            <h2>Add Notice</h2>
+            <hr>
+            <form method='post' id="form1"> {% csrf_token %}
+
+
+                <div class="form-group mb-2">
+
+                    <input type="text" class="form-control" id="noticetitleId" placeholder="Enter The Notice Title"
+                        name="noticetitle">
+                </div>
+                <div class="form-group mb-2">
+
+                    <textarea type="text" class="form-control" id="noticedescriptionId"
+                        placeholder="Description of Notice" name="noticedescription"></textarea>
+                </div>
+                <button type="submit" class="btn btn-danger m-2" id="add-notice-btnId" name="addNoticeForm">Post</button>
+            </form>
+
+        </div>
+        <hr>
+
+
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{% static '/js/main.js' %}"></script>
+{% endblock %}

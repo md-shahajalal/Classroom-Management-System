@@ -1,0 +1,68 @@
+{% extends 'studentApp/base.html'%}
+
+{% block title %}
+     Home Page
+{% endblock %}
+
+
+{% block body %}
+
+{% if length_of_classes %}
+<h2 class="container mb-5" style="text-align: center;">Class Schedule </h2>
+{% for semester_classes in classes %}
+<h5 class="container">{{semester_classes.0.class_semester}}</h5>
+<table class="table container mb-5">
+  <thead>
+    <tr>
+      <th scope="col">Course Name</th>
+      <th scope="col">Teacher</th>
+      <th scope="col">Date</th>
+      <th scope="col">Time</th>
+      <th scope="col">Duration</th>
+      <th scope="col">Room NO</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for class in semester_classes %}
+    <tr class="table-primary">
+      <td>{{class.class_course_name}} ({{class.class_course_code}})</td>
+      <td>{{class.class_assigned_teacher}}</td>
+      <td>{{class.class_date}}</td>
+      <td>{{class.class_time}}</td>
+      <td>{{class.class_duration}}</td>
+      <td>{{class.class_classroom}}</td>
+    </tr>
+    {% endfor %}
+   
+     
+     
+  </tbody>
+</table>
+{%endfor%}
+
+{% endif %}
+{%if length%}
+<h2 class="container mb-5" style="text-align: center;">Notices </h2>
+   {% for notice in notices %}
+<div class="card container my-3 py-3">
+    <div class="card-body">
+      <h2 class="card-title">{{notice.notice_title}}</h2>
+      <p>{{notice.notice_timestamp}}</p>
+      <p class="card-text">{{notice.notice_description}}</p>
+    </div>
+  </div>
+  {% endfor %}
+
+  {%endif%}
+{% endblock %}
+
+{% block js%}
+
+<script>
+    $(document).ready(function()
+    {
+        //$('.card-text').fadeOut(1000);
+    });
+  
+</script>
+{% endblock %}

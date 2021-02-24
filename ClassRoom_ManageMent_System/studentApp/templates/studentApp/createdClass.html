@@ -1,0 +1,73 @@
+{% extends 'studentApp/baseCreatedClass.html'%}
+
+<!--css-->
+{% block css %}
+<style>
+    .cardDeleteButton {
+        right: 20px;
+        position: absolute;
+    }
+    .card:hover{
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+</style>
+
+{% endblock %}
+
+<!--title-->
+{%block title%}
+My classes
+{% endblock %}
+
+
+<!--body-->
+{% block body %}
+<div class="container mb-3" style="text-align: center;">
+<h2>Classes You Are Teaching({{len}})</h2>
+</div>
+
+{% for class in teaching_classes %}
+{% if forloop.counter0|divisibleby:2 %}
+<div class="container row classes mt-5" style="margin: auto;">
+    <div class="col-md-5 column-left m-2">
+        <div class="card" >
+            <div class="card-body">
+                <h3 class="card-title">{{class.class_name}}</h3>
+                <h6 class="card-subtitle mb-2 text-muted">{{class.class_timestamp}}</h6>
+                <h5 class="card-subtitle mb-2 text-muted">Subject : {{class.class_subject}}</h5>
+                <h5 class="card-subtitle mb-2 text-muted">Section : {{class.class_section}}</h5>
+                <h5 class="card-subtitle mb-2 text-muted">Class code : {{class.class_code}}</h5>
+                <a type="button" class="btn btn-outline-success " href="/teaching/{{class.slug}}">Insert</a>
+                <a type="button" class="btn btn-outline-danger cardDeleteButton">Delete</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+<div class="col-md-5 column-right m-2">
+    <div class="card" >
+        <div class="card-body">
+            <h3 class="card-title">{{class.class_name}}</h3>
+            <h6 class="card-subtitle mb-2 text-muted">{{class.class_timestamp}}</h6>
+            <h5 class="card-subtitle mb-2 text-muted">Subject : {{class.class_subject}}</h5>
+            <h5 class="card-subtitle mb-2 text-muted">Section : {{class.class_section}}</h5>
+            <h5 class="card-subtitle mb-2 text-muted">Class code : {{class.class_code}}</h5>
+            <a type="button" class="btn btn-outline-success " href="/teaching/{{class.slug}}">Insert</a>
+            <a type="button" class="btn btn-outline-danger cardDeleteButton">Delete</a>
+        </div>
+    </div>
+</div>
+</div>
+{% endif %}
+
+{% endfor %}
+
+
+
+
+{% endblock %}
+<!--script-->
+{% block js%}
+
+{% endblock %}
+
+

@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+    {% block title %}
+    Admin
+   {% endblock %}
+   </title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <!--<script src="../../../js/popper.min.js"></script>-->
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    {% block css %} 
+
+    {% endblock %}
+  </head>
+  <body>
+    
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+          <a class="navbar-brand" href="#">Hidden brand</a>
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Home</a>
+            </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="/classes">Classes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/teaching">Teaching</a>
+            </li>
+            <li class="nav-item">
+              <div class="dropdown">
+              <button type="button" class="btn btn-outline-dark" id="activitydropdownId" data-bs-toggle="dropdown" aria-expanded="false"><svg  xmlns="http://www.w3.org/2000/svg" width="25" height="16" fill="currentColor" class="bi bi-align-center text-success"  viewBox="0 0 16 16">
+                <path d="M8 1a.5.5 0 0 1 .5.5V6h-1V1.5A.5.5 0 0 1 8 1zm0 14a.5.5 0 0 1-.5-.5V10h1v4.5a.5.5 0 0 1-.5.5zM2 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7z"/>
+              </svg></button>
+              <ul class="dropdown-menu" aria-labelledby="activitydropdownId">
+                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#join-class-modal">Join</a></li>
+                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#create-class-modal" >Create Class</a></li>
+      
+              </ul>
+              {% endif %}
+            </div>
+            </li>
+          </ul>
+          <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+          {% if user.is_authenticated %}
+         
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Welcome {{user.get_username}}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item" href="/profile">Profile</a></li>
+              <li><a class="dropdown-item" href="/logout">Logout</a></li>
+            </ul>
+          </div>
+          {% else %}
+          <button type="button" class="btn btn-outline-success mx-1 my-1" data-bs-toggle="modal" data-bs-target="#logInModal">LogIn</button>
+          <button type="button" class="btn btn-outline-success mx-1 my-1" data-bs-toggle="modal" data-bs-target="#signUpModal">
+            SignUp
+          </button>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+<!--warning/success message-->
+    {% for message in messages  %}            
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <strong>Message : </strong> {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+      {% endfor %} 
+
+    <!-- join class modal -->
+    <div class="modal fade" id="join-class-modal" tabindex="-1" aria-labelledby="joinClassModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="joinClassModalLabel">Join Class</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="join-class" method="POST">{% csrf_token%}
+    
+              <div class="mb-3">
+                <label for="classcode" class="form-label">Class code</label>
+                <input type="text" class="form-control" id="classcode" placeholder="Enter Class code" name="classcode" required>
+              </div>
+               
+              <button type="submit" class="btn btn-primary" id="join-classId">join</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create Class Modal -->
+<div class="modal fade" id="create-class-modal" tabindex="-1" aria-labelledby="createClassModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createClassModalLabel">Create Class</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="create-class" method="POST">{% csrf_token %}
+
+          <div class="mb-3">
+            <label for="classname" class="form-label">Class name</label>
+            <input type="text" class="form-control" id="classname" placeholder="Class name" name="classname" required>
+          </div>
+          <div class="mb-3">
+            <label for="class-subject" class="form-label">Subject</label>
+            <input type="text" class="form-control" id="class-subject" placeholder="Subject" name="class-subject" required>
+          </div>
+          <div class="mb-3">
+            <label for="section" class="form-label">Section</label>
+            <input type="text" class="form-control" id="section" placeholder="Section" name="section" required>
+          </div>
+  
+          <button type="submit" class="btn btn-primary" id="create-classId">Create</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+
+
+<!-- SignUp Modal -->
+<div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="signUpModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="signUpModalLabel">SignUp Here</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/signup" method="POST">{% csrf_token %}
+        <div class="form-group">
+          <label for="signUpUserNameId" class="form-label">Username</label>
+          <input type="text" class="form-control" id="signUpUserNameId" placeholder="Username(lowercase & alphanumeric)" name="user-name" required>
+        </div>
+        <div class="form-group">
+          <label for="signUpFirstNameId" class="form-label">First Name</label>
+          <input type="text" class="form-control" id="signUpFirstNameId" placeholder="First Name" name="fname" required>
+        </div> 
+        <div class="form-group">
+          <label for="signUpLastNameId" class="form-label">Last Name</label>
+          <input type="text" class="form-control" id="signUpLasrNameId" placeholder="Last Name" name="lname" required>
+        </div>
+
+        <div class="form-group">
+          <label for="signUpEmailId" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="signUpEmailId" name="email" aria-describedby="emailHelp" placeholder="name@email.com" required>
+          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="signUpPassword1" class="form-label">Choose a Password</label>
+          <input type="password" class="form-control" id="signUpPassword1" placeholder="Choose Your Password" name="pass1" required>
+        </div>
+
+        <div class="form-group">
+          <label for="signUpPassword2" class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" id="signUpPassword2" placeholder="Enter Your Password Again" name="pass2" required>
+        </div>
+        <button type="submit" class="btn btn-primary" id="signUp-btnId">SignUp</button>
+        </form>
+      </div>
+       
+    </div>
+  </div>
+</div>
+
+<!--login modal-->
+<div class="modal fade" id="logInModal" tabindex="-1" aria-labelledby="logInModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="logInModalLabel">Login Here</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form action="/login" method="POST">{% csrf_token%}
+
+        <div class="mb-3">
+          <label for="loginusername" class="form-label">Username</label>
+          <input type="text" class="form-control" id="loginusername" placeholder="Username" name="loginusername" required>
+        </div>
+         
+ 
+
+        <div class="mb-3">
+          <label for="loginpass" class="form-label">Enter Password</label>
+          <input type="password" class="form-control" id="loginpass" placeholder="Enter your Password" name="loginpass" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="logIn-btnId">Login</button>
+      </form>
+      </div>
+       
+    </div>
+  </div>
+</div>
+    {% block body%}
+    {% endblock %}
+
+    {% block js%} 
+    <!-- Optional JavaScript; choose one of the two! -->
+    
+    
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+   
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    -->
+    
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+    -->
+    {% endblock %}
+  </body>
+  
+</html>

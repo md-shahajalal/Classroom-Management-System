@@ -1,0 +1,95 @@
+{% extends 'studentApp/baseProfile.html' %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block css%}
+<style>
+    .image {
+        border: 1px solid #ddd;
+        /* Gray border */
+        border-radius: 4px;
+        /* Rounded border */
+        padding: 5px;
+        /* Some padding */
+        max-width: 250px;
+        /* Set a small width */
+    }
+
+    .image:hover {
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+
+    .changephoto {
+        margin-left: 50px;
+    }
+
+</style>
+{% endblock %}
+{% block body%}
+{% load static  %}
+<div class="container">
+    <figure class="figure mt-3 mb-1">
+        <img src="/media/{{userProfile.profile_pic}}" class="profile-pic rounded mx-auto figure-img img-fluid d-block image"
+            alt="...">
+        <figcaption class="figure-caption">{{userProfile.bio}}</figcaption>
+
+    </figure>
+    <!--
+    <form action="" method="POST">{%csrf_token%}
+        {{form}}
+        <button type="submit">update</button>
+    </form>
+-->
+     <form class="mb-3 mt-3" action="change-profile-pic" method="POST" enctype="multipart/form-data">{% csrf_token %}
+        <div class="demo" >
+            <label for="myfile"><b>change profile Pic: </b></label>
+            <input type="file" id="myfile" name="profilepic"><br><br>
+            </div>
+            <button type="submit" class="btn btn-primary">Change</button>
+     </form>
+     <h2>Information</h2>
+    <form action="update-profile" method="post">   {% csrf_token %}
+
+        <div class="row">
+            <div class="mb-3 col-md-5">
+                <label for="department" class="form-label">Department</label>
+                <input type="text" class="form-control" id="department" placeholder="department" name="department" value="{{userProfile.dept}}">
+            </div>
+            <div class="mb-3 col-md-5">
+                <label for="reg" class="form-label">Registration</label>
+                <input type="text" class="form-control" id="reg" placeholder="Registration/Roll" name="reg" value="{{userProfile.reg}}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-md-5">
+                <label for="session" class="form-label">Session</label>
+                <input type="text" class="form-control" id="session" placeholder="session" name="session" value="{{userProfile.session}}">
+            </div>
+            <div class="mb-3 col-md-5">
+                <label for="section" class="form-label">Section</label>
+                <input type="text" class="form-control" id="section" placeholder="section" name="section" value="{{userProfile.section}}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-md-5">
+                <label for="mobile" class="form-label">Mobile</label>
+                <input type="text" class="form-control" id="mobile" placeholder="mobile" name="mobile" value="{{userProfile.phone}}">
+            </div>
+            <div class="mb-3 col-md-5">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="md@example.com" name="email" value="{{userProfile.email}}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-md-10">
+                <label for="bio" class="form-label">Bio</label>
+                <textarea class="form-control" id="bio" rows="3" name="bio" value="{{userProfile.bio}}"></textarea>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mb-3 mt-3">Update</button>
+    </form>
+</div>
+
+{% endblock %}
